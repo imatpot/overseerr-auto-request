@@ -1,0 +1,21 @@
+cabal-version:      3.0
+name:               overseerr-auto-requester
+version:            0.1.0.0
+synopsis:           Automatically request TV shows or movies on Overseerr.
+license:            MIT
+license-file:       LICENSE
+author:             imatpot
+maintainer:         root@brankovic.dev
+category:           Web
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+
+common warnings
+    ghc-options: -Wall
+
+executable overseerr-auto-requester
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base ^>=4.18.2.1
+    hs-source-dirs:   app
+    default-language: GHC2021
