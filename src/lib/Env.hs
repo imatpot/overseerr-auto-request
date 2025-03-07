@@ -1,4 +1,4 @@
-module Lib.Env where
+module Lib.Env (username, password, overseerrUrl, movieIds, tvIds) where
 
 import Lib.Util (commaSeparated, dropEmpty, trim)
 import System.Environment (lookupEnv)

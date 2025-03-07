@@ -21,6 +21,7 @@ executable overseerr-auto-requester
     build-depends:      base ^>=4.18,
                         split ^>=0.2,
                         dotenv ^>=0.12,
+                        case-insensitive ^>=1.2,
                         bytestring ^>=0.12,
                         http-conduit ^>=2.3,
                         aeson ^>=2.2,

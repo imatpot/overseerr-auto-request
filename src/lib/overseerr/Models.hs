@@ -19,7 +19,7 @@ data MediaInfoDto = MkMediaInfoDto {mediaInfoAvailability :: Availability, media
 data MediaRequestDto = MkMediaRequestDto {mediaRequestId :: Int, mediaRequestStatus :: RequestStatus}
   deriving (Show)
 
-data AuthenticationDto = MkAuthenticationDto {username :: String, password :: String}
+data AuthenticationDto = MkAuthenticationDto {authenticationUsername :: String, authenticationPssword :: String}
   deriving (Show)
 
 instance FromJSON MediaDetailsDto where
