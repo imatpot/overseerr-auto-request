@@ -11,6 +11,7 @@
       let
         name = "overseerr-auto-requester";
         pkgs = nixpkgs.legacyPackages.${system};
+
         haskell-toolchain = with pkgs; [
           ghc
           cabal-install
@@ -22,7 +23,12 @@
           zlib
         ];
       in {
-        packages.default = pkgs.haskellPackages.callCabal2nix name ./. { };
+        packages = rec {
+          default = overseerr-auto-requester;
+
+          overseerr-auto-requester = pkgs.haskellPackages.callCabal2nix name ./. { };
+          http-sink = pkgs.haskellPackages.callCabal2nix "http-sink" ./. { };
+        };
 
         devShells.default = pkgs.mkShell {
           inherit name;

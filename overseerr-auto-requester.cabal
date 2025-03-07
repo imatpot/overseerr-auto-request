@@ -10,10 +10,14 @@ category:               Web
 build-type:             Simple
 extra-doc-files:        CHANGELOG.md
 
-executable overseerr-auto-requester
+common common-properties
     hs-source-dirs:     src
-    main-is:            Main.hs
     default-language:   Haskell2010
+    ghc-options:        -Wall
+
+executable overseerr-auto-requester
+    import:             common-properties
+    main-is:            Main.hs
     build-depends:      base ^>=4.18,
                         split ^>=0.2,
                         dotenv ^>=0.12,
@@ -22,4 +26,11 @@ executable overseerr-auto-requester
     other-modules:      Lib.Util,
                         Lib.Env,
                         Lib.Overseerr.Models,
-    ghc-options:        -Wall
+
+executable http-sink
+    import:             common-properties
+    main-is:            HttpSink.hs
+    build-depends:      base ^>=4.18,
+                        http-types ^>=0.12,
+                        wai ^>=3.2,
+                        warp ^>=3.4,
