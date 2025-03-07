@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "arrterian.nix-env-selector",
+        "discretegames.f5anything",
+        "jnoortheen.nix-ide",
+        "mkhl.direnv",
+        "mogeko.haskell-extension-pack",
+    ]
+}

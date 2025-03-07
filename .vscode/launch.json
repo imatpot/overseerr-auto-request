@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "cabal run",
+      "type": "f5anything",
+      "request": "launch",
+      "command": "cabal run -v0",
+    }
+  ]
+}
