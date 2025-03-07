@@ -1,27 +1,36 @@
 module Lib.Env where
 
-import Lib.Util (commaSeparated, trim)
-import System.Environment (getEnv, lookupEnv)
+import Lib.Util (commaSeparated, dropEmpty, trim)
+import System.Environment (lookupEnv)
 
 username :: IO String
-username = trim <$> getEnv "USERNAME"
+username = readEnvOrError "USERNAME"
 
 password :: IO String
-password = trim <$> getEnv "PASSWORD"
+password = readEnvOrError "PASSWORD"
 
 overseerrUrl :: IO String
-overseerrUrl = trim <$> getEnv "OVERSEERR_URL"
+overseerrUrl = readEnvOrError "OVERSEERR_URL"
 
 movieIds :: IO [String]
-movieIds = do
-  movieEnv <- lookupEnv "MOVIES"
-  case movieEnv of
-    Just ids -> return $ commaSeparated ids
+movieIds = readEnvListOrEmpty "MOVIES"
+
+tvIds :: IO [String]
+tvIds = readEnvListOrEmpty "TV"
+
+readEnvOrError :: String -> IO String
+readEnvOrError name = do
+  env <- lookupEnv name
+  case env of
+    Just val -> return $ trim val
+    Nothing -> error $ errorEnvNotSet name
+
+readEnvListOrEmpty :: String -> IO [String]
+readEnvListOrEmpty name = do
+  env <- lookupEnv name
+  case env of
+    Just val -> return $ dropEmpty $ commaSeparated val
     Nothing -> return []
 
-tvShowIds :: IO [String]
-tvShowIds = do
-  tvShowsEnv <- lookupEnv "TV_SHOWS"
-  case tvShowsEnv of
-    Just ids -> return $ commaSeparated ids
-    Nothing -> return []
+errorEnvNotSet :: String -> String
+errorEnvNotSet name = "Environment variable '" ++ name ++ "' not set"
