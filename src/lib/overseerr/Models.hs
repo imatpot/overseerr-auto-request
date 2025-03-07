@@ -2,7 +2,7 @@
 
 module Lib.Overseerr.Models where
 
-import Data.Aeson (FromJSON (parseJSON), withObject, (.!=), (.:), (.:?))
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), object, withObject, (.!=), (.:), (.:?), (.=))
 
 data Availability = Unknown | Pending | Processing | PartiallyAvailable | Available
   deriving (Show, Eq)
@@ -17,6 +17,9 @@ data MediaInfoDto = MkMediaInfoDto {mediaInfoAvailability :: Availability, media
   deriving (Show)
 
 data MediaRequestDto = MkMediaRequestDto {mediaRequestId :: Int, mediaRequestStatus :: RequestStatus}
+  deriving (Show)
+
+data AuthenticationDto = MkAuthenticationDto {username :: String, password :: String}
   deriving (Show)
 
 instance FromJSON MediaDetailsDto where
@@ -36,6 +39,10 @@ instance FromJSON MediaRequestDto where
     mediaRequestId' <- json .: "id"
     mediaRequestStatus' <- toEnum <$> json .: "status"
     return $ MkMediaRequestDto mediaRequestId' mediaRequestStatus'
+
+instance ToJSON AuthenticationDto where
+  toJSON (MkAuthenticationDto username' password') =
+    object ["username" .= username', "password" .= password']
 
 instance Enum Availability where
   fromEnum Unknown = 1
