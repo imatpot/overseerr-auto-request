@@ -10,4 +10,10 @@ dropEmpty :: [String] -> [String]
 dropEmpty = filter (not . null) . map trim
 
 commaSeparated :: String -> [String]
-commaSeparated = dropEmpty . splitOn ","
+commaSeparated = splitOn ","
+
+secondsToMicroseconds :: Double -> Int
+secondsToMicroseconds n = round $ n * 1000000
+
+minutesToMicroseconds :: Double -> Int
+minutesToMicroseconds n = secondsToMicroseconds $ n * 60

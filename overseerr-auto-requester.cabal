@@ -1,22 +1,25 @@
-cabal-version:      3.0
-name:               overseerr-auto-requester
-version:            0.1.0.0
-synopsis:           Automatically request TV shows or movies on Overseerr.
-license:            MIT
-license-file:       LICENSE
-author:             imatpot
-maintainer:         root@brankovic.dev
-category:           Web
-build-type:         Simple
-extra-doc-files:    CHANGELOG.md
-
-common warnings
-    ghc-options: -Wall
+cabal-version:          3.0
+name:                   overseerr-auto-requester
+version:                0.1.0.0
+synopsis:               Automatically request TV shows or movies on Overseerr.
+license:                MIT
+license-file:           LICENSE
+author:                 imatpot
+maintainer:             root@brankovic.dev
+category:               Web
+build-type:             Simple
+extra-doc-files:        CHANGELOG.md
 
 executable overseerr-auto-requester
-    import:           warnings
-    main-is:          Main.hs
-    build-depends:    base, split, dotenv
-    hs-source-dirs:   app
-    other-modules:    Lib.Util, Lib.Env
-    default-language: GHC2021
+    hs-source-dirs:     src
+    main-is:            Main.hs
+    default-language:   Haskell2010
+    build-depends:      base ^>=4.18,
+                        split ^>=0.2,
+                        dotenv ^>=0.12,
+                        http-conduit ^>=2.3,
+                        aeson ^>=2.2,
+    other-modules:      Lib.Util,
+                        Lib.Env,
+                        Lib.Overseerr.Models,
+    ghc-options:        -Wall

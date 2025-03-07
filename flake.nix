@@ -1,5 +1,5 @@
 {
-  description = "A toolbox for language construction";
+  description = "Automatically request TV shows or movies on Overseerr.";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixpkgs-unstable";
@@ -9,20 +9,23 @@
   outputs = { self, nixpkgs, utils }:
     utils.lib.eachDefaultSystem (system:
       let
+        name = "overseerr-auto-requester";
         pkgs = nixpkgs.legacyPackages.${system};
         haskell-toolchain = with pkgs; [
           ghc
           cabal-install
+
           haskell-language-server
           hlint
           ormolu
+
+          zlib
         ];
       in {
-        packages.default =
-          pkgs.haskellPackages.callCabal2nix "overseerr-auto-requester" ./. { };
+        packages.default = pkgs.haskellPackages.callCabal2nix name ./. { };
 
         devShells.default = pkgs.mkShell {
-          name = "overseerr-auto-requester";
+          inherit name;
 
           buildInputs = haskell-toolchain;
 
