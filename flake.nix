@@ -12,7 +12,7 @@
         name = "overseerr-auto-requester";
         pkgs = nixpkgs.legacyPackages.${system};
 
-        haskell-toolchain = with pkgs; [
+        toolchain = with pkgs; [
           ghc
           cabal-install
 
@@ -23,18 +23,25 @@
           zlib
           just
         ];
+
+        drv = pkgs.haskellPackages.callCabal2nix name ./. { };
+
+        runBin = bin:
+          pkgs.runCommand bin { } ''
+            mkdir -p $out/bin
+            ln -s ${drv}/bin/${bin} $out/bin/
+          '';
       in {
         packages = rec {
           default = overseerr-auto-requester;
-
-          overseerr-auto-requester = pkgs.haskellPackages.callCabal2nix name ./. { };
-          http-sink = pkgs.haskellPackages.callCabal2nix "http-sink" ./. { };
+          overseerr-auto-requester = runBin name;
+          http-sink = runBin "http-sink";
         };
 
         devShells.default = pkgs.mkShell {
           inherit name;
 
-          buildInputs = haskell-toolchain;
+          buildInputs = toolchain;
 
           shellHook = ''
             export CABAL_VERSION=$(cabal --version | head -n 1 | cut -d ' ' -f 3)
