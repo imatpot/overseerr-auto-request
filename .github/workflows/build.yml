@@ -15,22 +15,27 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-            - uses: haskell-actions/setup@v2
-              with:
-                  ghc-version: "9.6.6"
-                  cabal-version: "3.14"
             - name: Cache GHC
+              id: cache-ghc
               uses: actions/cache@v3
               env:
                   cache-name: cache-ghc
               with:
-                  path: ~/.ghcup
+                  path: |
+                    ~/.ghcup/ghc
+                    ~/.ghcup/bin
                   key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('**/cabal.project') }}
                   restore-keys: |
                       ${{ runner.os }}-build-${{ env.cache-name }}-
                       ${{ runner.os }}-build-
                       ${{ runner.os }}-
+            - uses: haskell-actions/setup@v2
+              if: steps.cache-ghc.outputs.cache-hit != 'true'
+              with:
+                  ghc-version: "9.6.6"
+                  cabal-version: "3.14"
             - name: Cache Cabal
+              id: cache-cabal
               uses: actions/cache@v3
               env:
                   cache-name: cache-cabal
