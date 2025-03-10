@@ -10,7 +10,7 @@ import GHC.IO.Handle (BufferMode (NoBuffering), hSetBuffering)
 import Lib.Env (debounceEnv, emailEnv, movieIdsEnv, passwordEnv, tvShowIdsEnv)
 import Lib.Overseerr.Models (MediaDetailsDto (mediaDetailsId))
 import Lib.Overseerr.Service (getUnavailableMovies, getUnavailableTvShows, requestMovies, requestTvShows, signIn)
-import Lib.Util (minutesToMicroseconds)
+import Lib.Util (secondsToMicroseconds)
 import Network.HTTP.Client (CookieJar, createCookieJar)
 import System.IO (stdout)
 
@@ -41,7 +41,7 @@ main = do
     handleRequestMediaError <$> join (requestTvShows <$> readIORef cookieJarRef <*> tvShowIdsEnv)
 
     putStrLn $ "Waiting " ++ show debounce ++ " seconds for next request..."
-    threadDelay $ minutesToMicroseconds debounce
+    threadDelay $ secondsToMicroseconds debounce
 
 --
 
