@@ -1,4 +1,4 @@
-module Lib.Overseerr.Service (signIn, getMovie, getTv, requestTv, requestMovie, getUnavailableTvs, getUnavailableMovies, getTvs, getMovies) where
+module Lib.Overseerr.Service (signIn, getMovie, getShow, requestShow, requestMovie, getUnavailableShows, getUnavailableMovies, getShows, getMovies) where
 
 import Control.Monad (join, void)
 import Data.Aeson (FromJSON, eitherDecode)
@@ -6,7 +6,7 @@ import Data.ByteString.Lazy (ByteString)
 import Debug.Trace (trace)
 import Lib.Env (overseerrUrlEnv)
 import Lib.Http (httpGetJsonAuthenticated, httpPost, httpPostAuthenticated)
-import Lib.Overseerr.Models (Availability (Unknown), MediaDetailsDto (mediaInfo), MediaInfoDto (mediaInfoAvailability, mediaInfoRequests), MediaRequestDto (mediaRequestStatus), RequestMediaDto (MkRequestMovieDto, MkRequestTvDto), RequestStatus (Approved), SignInDto (MkSignInDto))
+import Lib.Overseerr.Models (Availability (Unknown), MediaDetailsDto (mediaInfo), MediaInfoDto (mediaInfoAvailability, mediaInfoRequests), MediaRequestDto (mediaRequestStatus), RequestMediaDto (MkRequestMovieDto, MkRequestShowDto), RequestStatus (Approved), SignInDto (MkSignInDto))
 import Network.HTTP.Client (CookieJar, Response (responseCookieJar))
 
 overseerrBaseUrl :: IO String
@@ -18,8 +18,8 @@ overseerrApiPath = "/api/v1"
 overseerrAuthPath :: String
 overseerrAuthPath = "/auth/local"
 
-overseerrTvPath :: String -> String
-overseerrTvPath tvId = "/tv/" ++ tvId
+overseerrShowPath :: String -> String
+overseerrShowPath showId = "/tv/" ++ showId
 
 overseerrMoviePath :: String -> String
 overseerrMoviePath movieId = "/movie/" ++ movieId
@@ -34,16 +34,16 @@ signIn email password = do
     Right res -> Right $ responseCookieJar res
     Left status -> Left status
 
-getTv :: CookieJar -> Int -> IO (Either Int MediaDetailsDto)
-getTv jar tvId = do
-  tvRes <- httpGetJsonAuthenticated jar . (++ overseerrTvPath (show tvId)) =<< overseerrBaseUrl
-  return $ rightWhenDecodable tvRes
+getShow :: CookieJar -> Int -> IO (Either Int MediaDetailsDto)
+getShow jar showId = do
+  showRes <- httpGetJsonAuthenticated jar . (++ overseerrShowPath (show showId)) =<< overseerrBaseUrl
+  return $ rightWhenDecodable showRes
 
-getTvs :: CookieJar -> [Int] -> IO (Either Int [MediaDetailsDto])
-getTvs jar tvIds = sequence <$> mapM (getTv jar) tvIds
+getShows :: CookieJar -> [Int] -> IO (Either Int [MediaDetailsDto])
+getShows jar showIds = sequence <$> mapM (getShow jar) showIds
 
-getUnavailableTvs :: CookieJar -> [Int] -> IO (Either Int [MediaDetailsDto])
-getUnavailableTvs jar tvIds = fmap whereUnavailable <$> getTvs jar tvIds
+getUnavailableShows :: CookieJar -> [Int] -> IO (Either Int [MediaDetailsDto])
+getUnavailableShows jar showIds = fmap whereUnavailable <$> getShows jar showIds
 
 getMovie :: CookieJar -> Int -> IO (Either Int MediaDetailsDto)
 getMovie jar movieId = do
@@ -56,11 +56,11 @@ getMovies jar movieIds = sequence <$> mapM (getMovie jar) movieIds
 getUnavailableMovies :: CookieJar -> [Int] -> IO (Either Int [MediaDetailsDto])
 getUnavailableMovies jar movieIds = fmap whereUnavailable <$> getMovies jar movieIds
 
-requestTv :: CookieJar -> Int -> IO (Either Int ())
-requestTv jar tvId = requestMedia jar $ MkRequestTvDto tvId
+requestShow :: CookieJar -> Int -> IO (Either Int ())
+requestShow jar showId = requestMedia jar $ MkRequestShowDto showId
 
-requestTvs :: CookieJar -> [Int] -> IO (Either Int ())
-requestTvs jar tvIds = sequence_ <$> mapM (requestTv jar) tvIds
+requestShows :: CookieJar -> [Int] -> IO (Either Int ())
+requestShows jar showIds = sequence_ <$> mapM (requestShow jar) showIds
 
 requestMovie :: CookieJar -> Int -> IO (Either Int ())
 requestMovie jar movieId = requestMedia jar $ MkRequestMovieDto movieId

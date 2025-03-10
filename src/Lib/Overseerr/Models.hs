@@ -22,7 +22,7 @@ data MediaRequestDto = MkMediaRequestDto {mediaRequestId :: Int, mediaRequestSta
 data SignInDto = MkSignInDto {signInEmail :: String, signInPassword :: String}
   deriving (Show)
 
-data RequestMediaDto = MkRequestMovieDto {requestMovieId :: Int} | MkRequestTvDto {requestTvId :: Int}
+data RequestMediaDto = MkRequestMovieDto {requestMovieId :: Int} | MkRequestShowDto {requestShowId :: Int}
   deriving (Show)
 
 instance FromJSON MediaDetailsDto where
@@ -42,7 +42,7 @@ instance ToJSON SignInDto where
 
 instance ToJSON RequestMediaDto where
   toJSON (MkRequestMovieDto movieId) = object ["mediaId" .= movieId, "mediaType" .= ("movie" :: String)]
-  toJSON (MkRequestTvDto tvId) = object ["mediaId" .= tvId, "mediaType" .= ("tv" :: String), "seasons" .= ("all" :: String)]
+  toJSON (MkRequestShowDto showId) = object ["mediaId" .= showId, "mediaType" .= ("tv" :: String), "seasons" .= ("all" :: String)]
 
 instance Enum Availability where
   fromEnum Unknown = 1

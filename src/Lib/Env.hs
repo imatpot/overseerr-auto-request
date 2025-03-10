@@ -1,7 +1,9 @@
-module Lib.Env (emailEnv, passwordEnv, overseerrUrlEnv, movieIdsEnv, tvIdsEnv) where
+module Lib.Env (emailEnv, passwordEnv, overseerrUrlEnv, movieIdsEnv, showIdsEnv) where
 
+import Data.Maybe (mapMaybe)
 import Lib.Util (commaSeparated, dropEmpty, trim)
 import System.Environment (lookupEnv)
+import Text.Read (readMaybe)
 
 emailEnv :: IO String
 emailEnv = readEnvOrError "EMAIL"
@@ -12,11 +14,11 @@ passwordEnv = readEnvOrError "PASSWORD"
 overseerrUrlEnv :: IO String
 overseerrUrlEnv = readEnvOrError "OVERSEERR_URL"
 
-movieIdsEnv :: IO [String]
-movieIdsEnv = readEnvListOrEmpty "MOVIES"
+movieIdsEnv :: IO [Int]
+movieIdsEnv = mapMaybe readMaybe <$> readEnvListOrEmpty "MOVIES"
 
-tvIdsEnv :: IO [String]
-tvIdsEnv = readEnvListOrEmpty "TV"
+showIdsEnv :: IO [Int]
+showIdsEnv = mapMaybe readMaybe <$> readEnvListOrEmpty "SHOWS"
 
 readEnvOrError :: String -> IO String
 readEnvOrError name = maybe (error $ envNotSetError name) (return . trim) =<< lookupEnv name
