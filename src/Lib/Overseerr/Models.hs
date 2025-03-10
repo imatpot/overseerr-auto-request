@@ -42,7 +42,7 @@ instance ToJSON SignInDto where
 
 instance ToJSON RequestMediaDto where
   toJSON (MkRequestMovieDto movieId) = object ["mediaId" .= movieId, "mediaType" .= ("movie" :: String)]
-  toJSON (MkRequestShowDto showId) = object ["mediaId" .= showId, "mediaType" .= ("tv" :: String), "seasons" .= ("all" :: String)]
+  toJSON (MkRequestShowDto tvShowId) = object ["mediaId" .= tvShowId, "mediaType" .= ("tv" :: String), "seasons" .= ("all" :: String)]
 
 instance Enum Availability where
   fromEnum Unknown = 1
