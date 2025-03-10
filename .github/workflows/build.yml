@@ -21,9 +21,7 @@ jobs:
               env:
                   cache-name: cache-ghc
               with:
-                  path: |
-                    ~/.ghcup/ghc
-                    ~/.ghcup/bin
+                  path: ~/.ghcup
                   key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('**/cabal.project') }}
                   restore-keys: |
                       ${{ runner.os }}-build-${{ env.cache-name }}-
