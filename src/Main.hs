@@ -7,7 +7,8 @@ import Data.Either (fromLeft, fromRight)
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import Debug.Trace (trace)
 import GHC.IO.Handle (BufferMode (NoBuffering), hSetBuffering)
-import Lib.Env (emailEnv, movieIdsEnv, passwordEnv, tvShowIdsEnv)
+import Lib.Env (debounceEnv, emailEnv, movieIdsEnv, passwordEnv, tvShowIdsEnv)
+import Lib.Overseerr.Models (MediaDetailsDto (mediaDetailsId))
 import Lib.Overseerr.Service (getUnavailableMovies, getUnavailableTvShows, requestMovies, requestTvShows, signIn)
 import Lib.Util (minutesToMicroseconds)
 import Network.HTTP.Client (CookieJar, createCookieJar)
@@ -21,6 +22,8 @@ main = do
   cookieJarRef <- newIORef $ createCookieJar []
   updateCookieJar cookieJarRef
 
+  debounce <- debounceEnv
+
   forever $ do
     movies <- join $ getUnavailableMovies <$> readIORef cookieJarRef <*> movieIdsEnv
     tvShows <- join $ getUnavailableTvShows <$> readIORef cookieJarRef <*> tvShowIdsEnv
@@ -31,13 +34,16 @@ main = do
     let movies' = fromRight [] movies
     let tvShows' = fromRight [] tvShows
 
-    putStrLn $ "Requesting movies: " ++ show movies'
-    putStrLn $ "Requesting TV shows: " ++ show tvShows'
+    putStrLn $ "Requesting movies: " ++ show (map mediaDetailsId movies')
+    putStrLn $ "Requesting TV shows: " ++ show (map mediaDetailsId tvShows')
 
     handleRequestMediaError <$> join (requestMovies <$> readIORef cookieJarRef <*> movieIdsEnv)
     handleRequestMediaError <$> join (requestTvShows <$> readIORef cookieJarRef <*> tvShowIdsEnv)
 
-    threadDelay $ minutesToMicroseconds 5
+    putStrLn $ "Waiting " ++ show debounce ++ " seconds for next request..."
+    threadDelay $ minutesToMicroseconds debounce
+
+--
 
 updateCookieJar :: IORef CookieJar -> IO ()
 updateCookieJar cookieJarRef = do

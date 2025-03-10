@@ -10,3 +10,4 @@ services:
             OVERSEERR_URL: ${OVERSEERR_URL:-https://example.com}
             MOVIES: ${MOVIES:-1,2,3}
             SHOWS: ${SHOWS:-9,8,7}
+            DEBOUNCE_SECONDS: ${DEBOUNCE_SECONDS:-300}

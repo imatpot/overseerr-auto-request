@@ -1,9 +1,12 @@
-module Lib.Env (emailEnv, passwordEnv, overseerrUrlEnv, movieIdsEnv, tvShowIdsEnv) where
+module Lib.Env (emailEnv, passwordEnv, overseerrUrlEnv, movieIdsEnv, tvShowIdsEnv, debounceEnv) where
 
 import Data.Maybe (mapMaybe)
 import Lib.Util (commaSeparated, dropEmpty, trim)
 import System.Environment (lookupEnv)
 import Text.Read (readMaybe)
+
+debounceEnv :: IO Double
+debounceEnv = maybe 300 read <$> lookupEnv "DEBOUNCE_SECONDS"
 
 emailEnv :: IO String
 emailEnv = readEnvOrError "EMAIL"
