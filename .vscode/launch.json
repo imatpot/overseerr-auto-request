@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run Auto-Requester",
+      "name": "Run Auto-Request",
       "type": "f5anything",
       "request": "launch",
-      "command": "cabal run overseerr-auto-requester -v0",
+      "command": "cabal run overseerr-auto-request -v0",
     },
     {
       "name": "Run Http-Sink",

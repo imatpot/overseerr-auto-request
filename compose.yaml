@@ -1,8 +1,8 @@
 services:
-    overseerr-auto-requester:
+    overseerr-auto-request:
         build: .
-        container_name: overseerr-auto-requester
-        hostname: overseerr-auto-requester
+        container_name: overseerr-auto-request
+        hostname: overseerr-auto-request
         restart: unless-stopped
         environment:
             EMAIL: ${EMAIL:-user@example.com}

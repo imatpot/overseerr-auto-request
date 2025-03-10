@@ -9,7 +9,7 @@
   outputs = { self, nixpkgs, utils }:
     utils.lib.eachDefaultSystem (system:
       let
-        name = "overseerr-auto-requester";
+        name = "overseerr-auto-request";
         pkgs = nixpkgs.legacyPackages.${system};
 
         toolchain = with pkgs; [
@@ -33,8 +33,8 @@
           '';
       in {
         packages = rec {
-          default = overseerr-auto-requester;
-          overseerr-auto-requester = runBin name;
+          default = overseerr-auto-request;
+          overseerr-auto-request = runBin name;
           http-sink = runBin "http-sink";
         };
 
