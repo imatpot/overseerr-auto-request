@@ -19,30 +19,30 @@ data MediaInfoDto = MkMediaInfoDto {mediaInfoAvailability :: Availability, media
 data MediaRequestDto = MkMediaRequestDto {mediaRequestId :: Int, mediaRequestStatus :: RequestStatus}
   deriving (Show)
 
-data AuthenticationDto = MkAuthenticationDto {authenticationEmail :: String, authenticationPassword :: String}
+data SignInDto = MkSignInDto {signInEmail :: String, signInPassword :: String}
+  deriving (Show)
+
+data RequestMediaDto = MkRequestMovieDto {requestMovieId :: Int} | MkRequestTvDto {requestTvId :: Int}
   deriving (Show)
 
 instance FromJSON MediaDetailsDto where
   parseJSON = withObject "MediaDetailsDto" $ \json -> do
-    mediaDetailsId' <- json .: "id"
-    mediaInfo' <- json .:? "mediaInfo"
-    return $ MkMediaDetailsDto mediaDetailsId' mediaInfo'
+    MkMediaDetailsDto <$> json .: "id" <*> json .:? "mediaInfo"
 
 instance FromJSON MediaInfoDto where
   parseJSON = withObject "MediaInfoDto" $ \json -> do
-    mediaInfoAvailability' <- toEnum <$> json .: "status"
-    mediaInfoRequests' <- json .:? "requests" .!= []
-    return $ MkMediaInfoDto mediaInfoAvailability' mediaInfoRequests'
+    MkMediaInfoDto <$> (toEnum <$> (json .: "status")) <*> json .:? "requests" .!= []
 
 instance FromJSON MediaRequestDto where
   parseJSON = withObject "MediaRequestDto" $ \json -> do
-    mediaRequestId' <- json .: "id"
-    mediaRequestStatus' <- toEnum <$> json .: "status"
-    return $ MkMediaRequestDto mediaRequestId' mediaRequestStatus'
+    MkMediaRequestDto <$> json .: "id" <*> (toEnum <$> json .: "status")
 
-instance ToJSON AuthenticationDto where
-  toJSON (MkAuthenticationDto email password) =
-    object ["email" .= email, "password" .= password]
+instance ToJSON SignInDto where
+  toJSON (MkSignInDto email password) = object ["email" .= email, "password" .= password]
+
+instance ToJSON RequestMediaDto where
+  toJSON (MkRequestMovieDto movieId) = object ["mediaId" .= movieId, "mediaType" .= ("movie" :: String)]
+  toJSON (MkRequestTvDto tvId) = object ["mediaId" .= tvId, "mediaType" .= ("tv" :: String), "seasons" .= ("all" :: String)]
 
 instance Enum Availability where
   fromEnum Unknown = 1

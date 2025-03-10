@@ -19,18 +19,10 @@ tvIdsEnv :: IO [String]
 tvIdsEnv = readEnvListOrEmpty "TV"
 
 readEnvOrError :: String -> IO String
-readEnvOrError name = do
-  env <- lookupEnv name
-  case env of
-    Just val -> return $ trim val
-    Nothing -> error $ errorEnvNotSet name
+readEnvOrError name = maybe (error $ envNotSetError name) (return . trim) =<< lookupEnv name
 
 readEnvListOrEmpty :: String -> IO [String]
-readEnvListOrEmpty name = do
-  env <- lookupEnv name
-  case env of
-    Just val -> return $ dropEmpty $ commaSeparated val
-    Nothing -> return []
+readEnvListOrEmpty name = maybe [] (dropEmpty . commaSeparated) <$> lookupEnv name
 
-errorEnvNotSet :: String -> String
-errorEnvNotSet name = "Environment variable '" ++ name ++ "' not set"
+envNotSetError :: String -> String
+envNotSetError name = "Environment variable '" ++ name ++ "' not set"
