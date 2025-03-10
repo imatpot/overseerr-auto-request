@@ -1,17 +1,21 @@
 module Main where
 
-import Configuration.Dotenv (defaultConfig, loadFile)
+import Configuration.Dotenv (defaultConfig, loadFile, onMissingFile)
 import Control.Concurrent (threadDelay)
 import Control.Monad (forever, join)
 import Data.IORef (newIORef, readIORef, writeIORef)
+import GHC.IO.Handle (BufferMode (NoBuffering), hSetBuffering)
 import Lib.Env (emailEnv, passwordEnv)
 import Lib.Overseerr.Service (getUnavailableMovies, signIn)
 import Lib.Util (minutesToMicroseconds)
 import Network.HTTP.Client (createCookieJar)
+import System.IO (stdout)
 
 main :: IO ()
 main = do
-  loadFile defaultConfig
+  hSetBuffering stdout NoBuffering
+  onMissingFile (loadFile defaultConfig) (pure ())
+
   cookieJarRef <- newIORef $ createCookieJar []
 
   signInRes <- join $ signIn <$> emailEnv <*> passwordEnv

@@ -1,0 +1,12 @@
+services:
+    overseerr-auto-requester:
+        build: .
+        container_name: overseerr-auto-requester
+        hostname: overseerr-auto-requester
+        restart: unless-stopped
+        environment:
+            EMAIL: ${EMAIL:-user@example.com}
+            PASSWORD: ${PASSWORD:-mysecretpassword}
+            OVERSEERR_URL: ${OVERSEERR_URL:-https://example.com}
+            MOVIES: ${MOVIES:-1,2,3}
+            TV: ${TV:-9,8,7}
