@@ -16,7 +16,7 @@ RUN find dist-newstyle/build -type f -name overseerr-auto-request -exec cp {} /b
 
 FROM debian:bullseye-slim
 
-COPY --from=build /build/overseerr-auto-request /opt/overseerr-auto-request
+COPY --from=build-app /build/overseerr-auto-request /opt/overseerr-auto-request
 RUN chmod +x /opt/overseerr-auto-request
 RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
 
