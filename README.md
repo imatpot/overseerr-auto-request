@@ -96,6 +96,18 @@ or, alternatively, you can use Docker Compose:
 docker compose up
 ```
 
+You can also use the prebuilt image on [GitHub CR](https://ghcr.io/imatpot/overseerr-auto-request) with
+
+```
+docker run \
+    -e EMAIL="user@example.com" \
+    -e PASSWORD="password" \
+    -e OVERSEERR_URL="https://example.com" \
+    -e MOVIES="40016,126486" \
+    -e DEBOUNCE_SECONDS=300 \
+    ghcr.io/imatpot/overseerr-auto-request
+```
+
 ## Environment Variables
 
 The auto requester requires several environment variables to run.
