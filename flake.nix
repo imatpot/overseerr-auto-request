@@ -21,6 +21,7 @@
           ormolu
 
           zlib
+          just
         ];
       in {
         packages = rec {
