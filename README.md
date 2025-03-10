@@ -1,5 +1,8 @@
 # Overseerr Auto Request
 
+![build workflow status](https://github.com/imatpot/overseerr-auto-request/actions/workflows/build.yml/badge.svg)
+![publish workflow status](https://github.com/imatpot/overseerr-auto-request/actions/workflows/publish.yml/badge.svg)
+
 [Overseerr](https://overseerr.dev/) is a fantastic application, which allows your friends to request movies and TV series for your [Plex Server](https://www.plex.tv/).
 However, it lacks a built-in way to automatically re-requests specific titles once they get denied.
 
