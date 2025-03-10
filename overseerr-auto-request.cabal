@@ -18,7 +18,7 @@ common common-properties
 executable overseerr-auto-request
     import:             common-properties
     main-is:            Main.hs
-    build-depends:      base ^>=4.18,
+    build-depends:      base >=4.18 && <5,
                         split ^>=0.2,
                         dotenv ^>=0.11,
                         case-insensitive ^>=1.2,

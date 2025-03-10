@@ -45,6 +45,7 @@ jobs:
                       ${{ runner.os }}-build-
                       ${{ runner.os }}-
             - name: Build dependencies
+              if: steps.cache-cabal.outputs.cache-hit != 'true'
               run: cabal update && cabal build --only-dependencies
             - name: Build
               run: cabal build all
