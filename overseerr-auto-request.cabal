@@ -18,7 +18,7 @@ common common-properties
 executable overseerr-auto-request
     import:             common-properties
     main-is:            Main.hs
-    build-depends:      base >=4.18 && <5,
+    build-depends:      base ^>=4.18,
                         split ^>=0.2,
                         dotenv ^>=0.11,
                         case-insensitive ^>=1.2,
@@ -36,7 +36,7 @@ executable overseerr-auto-request
 executable http-sink
     import:             common-properties
     main-is:            HttpSink.hs
-    build-depends:      base >=4.18 && <5,
+    build-depends:      base ^>=4.18,
                         http-types ^>=0.12,
                         wai ^>=3.2,
                         warp ^>=3.3,
