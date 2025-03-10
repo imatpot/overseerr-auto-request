@@ -1,22 +1,22 @@
-module Lib.Env (username, password, overseerrUrl, movieIds, tvIds) where
+module Lib.Env (emailEnv, passwordEnv, overseerrUrlEnv, movieIdsEnv, tvIdsEnv) where
 
 import Lib.Util (commaSeparated, dropEmpty, trim)
 import System.Environment (lookupEnv)
 
-username :: IO String
-username = readEnvOrError "USERNAME"
+emailEnv :: IO String
+emailEnv = readEnvOrError "EMAIL"
 
-password :: IO String
-password = readEnvOrError "PASSWORD"
+passwordEnv :: IO String
+passwordEnv = readEnvOrError "PASSWORD"
 
-overseerrUrl :: IO String
-overseerrUrl = readEnvOrError "OVERSEERR_URL"
+overseerrUrlEnv :: IO String
+overseerrUrlEnv = readEnvOrError "OVERSEERR_URL"
 
-movieIds :: IO [String]
-movieIds = readEnvListOrEmpty "MOVIES"
+movieIdsEnv :: IO [String]
+movieIdsEnv = readEnvListOrEmpty "MOVIES"
 
-tvIds :: IO [String]
-tvIds = readEnvListOrEmpty "TV"
+tvIdsEnv :: IO [String]
+tvIdsEnv = readEnvListOrEmpty "TV"
 
 readEnvOrError :: String -> IO String
 readEnvOrError name = do

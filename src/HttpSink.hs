@@ -5,7 +5,7 @@
 module Main where
 
 import Network.HTTP.Types (status200)
-import Network.Wai (Application, Request (rawPathInfo, requestMethod), responseLBS, strictRequestBody)
+import Network.Wai (Application, Request (rawPathInfo, requestHeaders, requestMethod), responseLBS, strictRequestBody)
 import Network.Wai.Handler.Warp (run)
 
 main :: IO ()
@@ -16,5 +16,5 @@ main = do
 server :: Application
 server req respond = do
   body <- strictRequestBody req
-  putStrLn $ show (requestMethod req) ++ " " ++ show (rawPathInfo req) ++ " " ++ show body
+  putStrLn $ show (requestMethod req) ++ " " ++ show (rawPathInfo req) ++ " " ++ show (requestHeaders req) ++ " " ++ show body
   respond $ responseLBS status200 [("Content-Type", "text/json")] "{\"status\": \"ok\"}"

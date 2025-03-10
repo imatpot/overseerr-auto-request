@@ -19,7 +19,7 @@ data MediaInfoDto = MkMediaInfoDto {mediaInfoAvailability :: Availability, media
 data MediaRequestDto = MkMediaRequestDto {mediaRequestId :: Int, mediaRequestStatus :: RequestStatus}
   deriving (Show)
 
-data AuthenticationDto = MkAuthenticationDto {authenticationUsername :: String, authenticationPssword :: String}
+data AuthenticationDto = MkAuthenticationDto {authenticationEmail :: String, authenticationPassword :: String}
   deriving (Show)
 
 instance FromJSON MediaDetailsDto where
@@ -30,7 +30,7 @@ instance FromJSON MediaDetailsDto where
 
 instance FromJSON MediaInfoDto where
   parseJSON = withObject "MediaInfoDto" $ \json -> do
-    mediaInfoAvailability' <- toEnum <$> json .: "availability"
+    mediaInfoAvailability' <- toEnum <$> json .: "status"
     mediaInfoRequests' <- json .:? "requests" .!= []
     return $ MkMediaInfoDto mediaInfoAvailability' mediaInfoRequests'
 
@@ -41,8 +41,8 @@ instance FromJSON MediaRequestDto where
     return $ MkMediaRequestDto mediaRequestId' mediaRequestStatus'
 
 instance ToJSON AuthenticationDto where
-  toJSON (MkAuthenticationDto username' password') =
-    object ["username" .= username', "password" .= password']
+  toJSON (MkAuthenticationDto email password) =
+    object ["email" .= email, "password" .= password]
 
 instance Enum Availability where
   fromEnum Unknown = 1

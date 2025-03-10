@@ -23,12 +23,15 @@ executable overseerr-auto-requester
                         dotenv ^>=0.12,
                         case-insensitive ^>=1.2,
                         bytestring ^>=0.12,
+                        http-client ^>=0.7,
+                        http-client-tls ^>=0.3,
                         http-conduit ^>=2.3,
                         aeson ^>=2.2,
     other-modules:      Lib.Util,
                         Lib.Env,
                         Lib.Http,
                         Lib.Overseerr.Models,
+                        Lib.Overseerr.Service,
 
 executable http-sink
     import:             common-properties
