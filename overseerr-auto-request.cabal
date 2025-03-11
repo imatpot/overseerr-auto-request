@@ -1,6 +1,6 @@
 cabal-version:          3.0
 name:                   overseerr-auto-request
-version:                0.1.0.1
+version:                0.1.0.2
 synopsis:               Automatically request TV shows or movies on Overseerr.
 license:                MIT
 license-file:           LICENSE

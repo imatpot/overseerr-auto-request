@@ -45,23 +45,27 @@ instance ToJSON RequestMediaDto where
   toJSON (MkRequestShowDto tvShowId) = object ["mediaId" .= tvShowId, "mediaType" .= ("tv" :: String), "seasons" .= ("all" :: String)]
 
 instance Enum Availability where
-  fromEnum Unknown = 1
-  fromEnum Pending = 2
-  fromEnum Processing = 3
-  fromEnum PartiallyAvailable = 4
-  fromEnum Available = 5
-  toEnum 1 = Unknown
-  toEnum 2 = Pending
-  toEnum 3 = Processing
-  toEnum 4 = PartiallyAvailable
-  toEnum 5 = Available
-  toEnum n = error $ "Illegal availability: " ++ show n
+  fromEnum x = case x of
+    Unknown -> 1
+    Pending -> 2
+    Processing -> 3
+    PartiallyAvailable -> 4
+    Available -> 5
+  toEnum x = case x of
+    1 -> Unknown
+    2 -> Pending
+    3 -> Processing
+    4 -> PartiallyAvailable
+    5 -> Available
+    _ -> error $ "Illegal availability: " ++ show x
 
 instance Enum RequestStatus where
-  fromEnum PendingApproval = 1
-  fromEnum Approved = 2
-  fromEnum Declined = 3
-  toEnum 1 = PendingApproval
-  toEnum 2 = Approved
-  toEnum 3 = Declined
-  toEnum n = error $ "Illegal request status: " ++ show n
+  fromEnum x = case x of
+    PendingApproval -> 1
+    Approved -> 2
+    Declined -> 3
+  toEnum x = case x of
+    1 -> PendingApproval
+    2 -> Approved
+    3 -> Declined
+    _ -> error $ "Illegal request status: " ++ show x

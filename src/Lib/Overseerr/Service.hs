@@ -30,9 +30,7 @@ overseerrRequestPath = "/request"
 signIn :: String -> String -> IO (Either Int CookieJar)
 signIn email password = do
   signInRes <- join $ httpPost <$> ((++ overseerrAuthPath) <$> overseerrBaseUrl) <*> pure (MkSignInDto email password)
-  return $ case signInRes of
-    Right res -> Right $ responseCookieJar res
-    Left status -> Left status
+  return $ responseCookieJar <$> signInRes
 
 getShow :: CookieJar -> Int -> IO (Either Int MediaDetailsDto)
 getShow jar tvShowId = do
@@ -74,11 +72,7 @@ requestMedia jar dto = do
   return $ void request
 
 rightWhenDecodable :: (FromJSON a) => Either Int ByteString -> Either Int a
-rightWhenDecodable body = case body of
-  Left status -> Left status
-  Right body' -> case eitherDecode body' of
-    Left err -> trace err $ Left (-1)
-    Right res -> Right res
+rightWhenDecodable = either Left (either (const $ Left (-1)) Right . eitherDecode)
 
 whereUnavailable :: [MediaDetailsDto] -> [MediaDetailsDto]
 whereUnavailable = filter (maybe True isUnrequested . mediaInfo)
