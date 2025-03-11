@@ -31,14 +31,14 @@ main = do
     handleGetMediaError cookieJarRef movies
     handleGetMediaError cookieJarRef tvShows
 
-    let movies' = fromRight [] movies
-    let tvShows' = fromRight [] tvShows
+    let movieIds = map mediaDetailsId $ fromRight [] movies
+    let tvShowIds = map mediaDetailsId $ fromRight [] tvShows
 
-    putStrLn $ "Requesting movies: " ++ show (map mediaDetailsId movies')
-    putStrLn $ "Requesting TV shows: " ++ show (map mediaDetailsId tvShows')
+    putStrLn $ "Requesting movies: " ++ show movieIds
+    putStrLn $ "Requesting TV shows: " ++ show tvShowIds
 
-    handleRequestMediaError <$> join (requestMovies <$> readIORef cookieJarRef <*> movieIdsEnv)
-    handleRequestMediaError <$> join (requestTvShows <$> readIORef cookieJarRef <*> tvShowIdsEnv)
+    handleRequestMediaError <$> join (requestMovies <$> readIORef cookieJarRef <*> pure movieIds)
+    handleRequestMediaError <$> join (requestTvShows <$> readIORef cookieJarRef <*> pure tvShowIds)
 
     putStrLn $ "Waiting " ++ show debounce ++ " seconds for next request..."
     threadDelay $ secondsToMicroseconds debounce
